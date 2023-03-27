@@ -19,8 +19,9 @@ flags.DEFINE_string('output_dir', '.', 'Directory to write output files to.')
 
 def humanize_duration(seconds: float) -> str:
   delta = relativedelta.relativedelta(microseconds=round(seconds * 1e6))
+  milliseconds = round(delta.microseconds / 1000)
   return (f'{delta.hours:02}:{delta.minutes:02}:{delta.seconds:02}'
-          f'.{delta.microseconds:06}')
+          f'.{milliseconds:03}')
 
 
 def do_filtering(transcription_path: str, audio_path: str, output_path: str,
