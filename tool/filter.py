@@ -24,6 +24,19 @@ def humanize_duration(seconds: float) -> str:
           f'.{milliseconds:03}')
 
 
+def print_segment(segment: dict, idx: int, num_segments: int):
+  start_seconds = segment['start']
+  end_seconds = segment['end']
+  print(f'[{idx + 1}/{num_segments}] {humanize_duration(start_seconds)} - '
+        f'{humanize_duration(end_seconds)}: {segment["text"]}')
+  print(f'      avg_logprob: {segment["avg_logprob"]:0.3f}')
+  print(f'compression_ratio: {segment["compression_ratio"]:0.3f}')
+  print(f'   no_speech_prob: {segment["no_speech_prob"]:0.3f}')
+  word_probs = [word['probability'] for word in segment['words']]
+  word_probs_humanized = ', '.join([f'{p:0.3f}' for p in word_probs])
+  print(f'       word_probs: [{word_probs_humanized}]')
+
+
 def do_filtering(transcription_path: str, audio_path: str, output_path: str,
                  temp_path: str):
   with open(transcription_path, 'r', encoding='utf-8') as f:
@@ -51,8 +64,7 @@ def do_filtering(transcription_path: str, audio_path: str, output_path: str,
     end_sample = int(end_seconds * sample_rate)
     segment_audio = audio[start_sample:end_sample]
 
-    print(f'[{idx + 1}/{len(segments)}] {humanize_duration(start_seconds)} - '
-          f'{humanize_duration(end_seconds)}: {segment["text"]}')
+    print_segment(segment, idx, len(segments))
 
     # Play audio
     play_obj = simpleaudio.play_buffer(segment_audio, 1, 2, sample_rate)
