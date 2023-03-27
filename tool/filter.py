@@ -56,7 +56,6 @@ def do_filtering(transcription_path: str, audio_path: str, output_path: str,
 
     # Play audio
     play_obj = simpleaudio.play_buffer(segment_audio, 1, 2, sample_rate)
-    play_obj.wait_done()
 
     # Ask user for input
     while True:
@@ -95,6 +94,8 @@ def do_filtering(transcription_path: str, audio_path: str, output_path: str,
       except KeyboardInterrupt:
         print('Aborting...')
         return
+
+    play_obj.stop()
 
     with open(temp_path, 'w', encoding='utf-8') as f:
       json.dump({
