@@ -16,7 +16,5 @@ for speaker in "${speakers[@]}"; do
   python -m filter \
     --transcription_dir="../../01_transcribe/out/${speaker}" \
     --audio_dir="../../data/wav_22.05k/${speaker}" \
-    --output_dir="${output_dir}" \
-    > >(tee "${output_dir}/filter_stdout.log") \
-    2> >(tee "${output_dir}/filter_stderr.log" >&2)
+    --output_dir="${output_dir}"
 done
